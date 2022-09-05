@@ -49,6 +49,7 @@
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-adonis": "^2.1.0",
 		"eslint-plugin-prettier": "^4.2.1",
+		"openapi-types": "^12.0.2",
 		"pino-pretty": "^9.1.0",
 		"prettier": "^2.7.1",
 		"typescript": "~4.6",
@@ -58,8 +59,10 @@
 	"dependencies": {
 		"@adonisjs/core": "^5.8.0",
 		"@adonisjs/repl": "^3.1.0",
+		"@ruby184/adonis-socket.io": "^0.2.0",
 		"proxy-addr": "^2.0.7",
 		"reflect-metadata": "^0.1.13",
+		"socket.io": "^4.5.2",
 		"source-map-support": "^0.5.21"
 	}
 }
