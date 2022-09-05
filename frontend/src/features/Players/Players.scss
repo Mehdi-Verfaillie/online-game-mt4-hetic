@@ -1,0 +1,27 @@
+.containerPlayers {
+	position: relative;
+	width: 80px;
+	height: 80px;
+	margin: 20px;
+
+	.pseudo {
+		position: absolute;
+		top: -25px;
+		left: 0;
+		right: 0;
+		text-align: center;
+	}
+
+	.life {
+		position: absolute;
+		top: -5px;
+		z-index: 100;
+	}
+	.word {
+		position: absolute;
+		bottom: -25px;
+		left: 0;
+		right: 0;
+		text-align: center;
+	}
+}
