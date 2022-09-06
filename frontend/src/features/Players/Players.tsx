@@ -3,15 +3,21 @@ import PlayersCard from './composant/PlayersCard/PlayersCard';
 import Life from './composant/Life/Life';
 import './Players.scss';
 
-function Players() {
+type Props = {
+	active?: boolean;
+	name?: string;
+	value?: string;
+};
+
+function Players(props: Props) {
 	return (
 		<div className="containerPlayers">
-			<div className="pseudo">Pseudo</div>
+			<div className="pseudo">{props.name}</div>
 			<span className="life">
 				<Life life={3} />
 			</span>
-			<PlayersCard />
-			<div className="word">PIE</div>
+			<PlayersCard active={props.active} />
+			<div className="word">{props.value}</div>
 		</div>
 	);
 }
