@@ -1,0 +1,89 @@
+@font-face {
+	font-family: 'Viga';
+	src: url(../../style//fonts/Viga-Regular.ttf);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	font-family: 'Viga';
+}
+
+.body {
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	background: linear-gradient(180deg, #191831 0%, #131226 100%);
+
+	.title {
+		display: flex;
+		justify-content: center;
+		margin-top: 20px;
+		h1 {
+			font-size: 24px;
+			color: #eff4fd;
+		}
+	}
+	.containerBomb {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		height: 100%;
+
+		.letter {
+			position: absolute;
+			margin: auto;
+			left: 0;
+			right: 0;
+			top: 25px;
+			text-align: center;
+
+			font-size: 24px;
+			color: #ffffff;
+			text-transform: uppercase;
+		}
+		.bomb {
+			margin-bottom: 64px;
+		}
+
+		.players {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		.star {
+			position: absolute;
+			top: -10px;
+			left: 60px;
+
+			@keyframes move {
+				0% {
+					transform: scale(1);
+				}
+
+				100% {
+					transform: scale(1.3);
+				}
+			}
+			animation: move 0.1s infinite alternate;
+		}
+		.input {
+			width: 80vw;
+			max-width: 520px;
+			margin-left: 24px;
+			margin-right: 24px;
+			height: 46px;
+			border-radius: 16px;
+			background: #2a2a58;
+			box-shadow: 0px 4px 0px #202043;
+			text-align: center;
+			color: #eff4fd;
+			text-transform: uppercase;
+			border: none;
+			margin-top: 48px;
+			outline: none;
+		}
+	}
+}

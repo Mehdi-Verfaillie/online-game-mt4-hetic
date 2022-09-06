@@ -1,6 +1,6 @@
 import React from 'react';
 
-import LifeLogo from './life.svg';
+import LifeLogo from '../../../../style/images/life.svg';
 
 type Props = {
 	life?: number;
