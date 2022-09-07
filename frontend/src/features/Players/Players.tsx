@@ -7,11 +7,12 @@ type Props = {
 	active?: boolean;
 	name?: string;
 	value?: string;
+	isDead?: boolean;
 };
 
 function Players(props: Props) {
 	return (
-		<div className="containerPlayers">
+		<div data-isdead={props.isDead} className="containerPlayers">
 			<div className="pseudo">{props.name}</div>
 			<span className="life">
 				<Life life={3} />

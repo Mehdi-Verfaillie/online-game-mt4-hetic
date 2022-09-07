@@ -7,6 +7,10 @@
 	height: 80px;
 	margin: 48px 24px 48px 24px;
 
+	&[data-isDead='true'] {
+		opacity: 0.5;
+	}
+
 	.pseudo {
 		position: absolute;
 		top: -35px;
