@@ -1,28 +1,38 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
 import './Game.scss';
-import Bomb from '../../style/images/bomb';
+import Bomb from '../../style/images/bomb.svg';
 import Bomb2 from '../../style/images/bomb2.svg';
 import Star from '../../style/images/star.svg';
+import { EngWordApi } from './api/EngWordApi';
+import { LetterList, PlayersList } from './Data';
 
 import Players from '../Players/Players';
-
 function Game() {
 	const [value, setValue] = useState('');
 	const [isMyTurn, setIsMyTurn] = useState(true); // temporaire :  a voir comment recuperer l'etat pour savoir qui joue
-	const players = [{ name: 'test' }, { name: 'test2' }, { name: 'test3' }, { name: 'test4' }];
 	const [increment, setIncrement] = useState(0);
-	const [currentPlayer, setCurrentPlayer] = useState(players[0].name);
-	const [letter, setLetter] = useState('NT');
+	const [currentPlayer, setCurrentPlayer] = useState(PlayersList[0].name);
 
-	const handleKeyPress = (event) => {
+	const random = () => {
+		return LetterList[Math.floor(Math.random() * LetterList.length)];
+	};
+	const [letter, setLetter] = useState(random());
+
+	useEffect(() => {
+		setCurrentPlayer(PlayersList[increment].name);
+	}, [increment]);
+
+	const handleKeyPress = async (event) => {
 		if (event.key === 'Enter') {
-			if (value.toUpperCase().indexOf(letter) > -1) {
-				if (increment < players.length - 1) {
+			const exist = await EngWordApi(value);
+			if (exist == true && value.toUpperCase().indexOf(letter) > -1) {
+				if (increment < PlayersList.length - 1) {
 					setIncrement(increment + 1);
-					setCurrentPlayer(players[increment].name);
+					setLetter(random());
 				} else {
 					setIncrement(0);
-					setCurrentPlayer(players[increment].name);
+					setCurrentPlayer(PlayersList[increment].name);
 				}
 			}
 
@@ -48,7 +58,7 @@ function Game() {
 				</div>
 
 				<div className="players">
-					{players.map((player, i) => {
+					{PlayersList.map((player, i) => {
 						return (
 							<Players
 								key={i}
