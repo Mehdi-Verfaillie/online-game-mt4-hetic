@@ -13,6 +13,7 @@ import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import { Server as SocketServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
+import GameController from './controllers/game.controller';
 
 class App {
   public app: express.Application;
@@ -32,6 +33,7 @@ class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    this.initializeGame();
   }
 
   public listen() {
@@ -67,6 +69,10 @@ class App {
     routes.forEach(route => {
       this.app.use('/', route.router);
     });
+  }
+
+  public initializeGame() {
+    new GameController(this.socket).init();
   }
 
   private initializeSwagger() {
