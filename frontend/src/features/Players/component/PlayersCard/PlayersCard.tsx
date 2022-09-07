@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import './PlayersCard.scss';
 
-import PlayersLogo from './player.svg';
+import PlayersLogo from '../../../../style/images/player.svg';
 
 type Props = {
 	active?: boolean;
