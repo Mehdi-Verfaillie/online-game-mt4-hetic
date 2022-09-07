@@ -13,15 +13,37 @@ function Game() {
 	const [isMyTurn, setIsMyTurn] = useState(true); // temporaire :  a voir comment recuperer l'etat pour savoir qui joue
 	const [increment, setIncrement] = useState(0);
 	const [currentPlayer, setCurrentPlayer] = useState(PlayersList[0].name);
-
+	const [counter, setCounter] = useState(Math.floor(Math.random() * (15 - 10 + 1) + 10));
 	const random = () => {
 		return LetterList[Math.floor(Math.random() * LetterList.length)];
 	};
 	const [letter, setLetter] = useState(random());
+	const [dead, setDead] = useState([]);
 
 	useEffect(() => {
-		setCurrentPlayer(PlayersList[increment].name);
+		if (dead.length != PlayersList.length - 1) {
+			counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+		}
+		if (counter == 0) {
+			setDead([...dead, PlayersList[increment].name]);
+
+			PlayersList.splice(increment, 1, 'dead');
+			setCounter(Math.floor(Math.random() * (15 - 10 + 1) + 10));
+			setIncrement(increment + 1);
+		}
+	}, [counter]);
+
+	useEffect(() => {
+		if (PlayersList[increment] == 'dead') {
+			setIncrement(increment + 1);
+		} else {
+			setCurrentPlayer(PlayersList[increment].name);
+		}
 	}, [increment]);
+
+	useEffect(() => {
+		if (currentPlayer == 'dead') setIncrement(increment + 1);
+	}, [currentPlayer]);
 
 	const handleKeyPress = async (event) => {
 		if (event.key === 'Enter') {
@@ -29,6 +51,7 @@ function Game() {
 			if (exist == true && value.toUpperCase().indexOf(letter) > -1) {
 				if (increment < PlayersList.length - 1) {
 					setIncrement(increment + 1);
+
 					setLetter(random());
 				} else {
 					setIncrement(0);
@@ -58,16 +81,36 @@ function Game() {
 				</div>
 
 				<div className="players">
-					{PlayersList.map((player, i) => {
-						return (
-							<Players
-								key={i}
-								active={currentPlayer == player.name ? true : false}
-								name={player.name}
-								value={currentPlayer == player.name ? value.toLocaleUpperCase() : null}
-							/>
-						);
-					})}
+					{dead.length == PlayersList.length - 1 ? (
+						<>
+							<div
+								style={{
+									display: 'flex',
+									flexDirection: 'column',
+									justifyContent: 'center',
+									alignItems: 'center',
+									color: 'white',
+								}}
+							>
+								<p>WIN</p>
+								<Players active={false} name={PlayersList[increment].name} value={null} />
+							</div>
+						</>
+					) : (
+						PlayersList.map((player, i) => {
+							if (player == 'dead') {
+								return <Players active={false} name={null} value={null} isDead={true} />;
+							}
+							return (
+								<Players
+									key={i}
+									active={currentPlayer == player.name ? true : false}
+									name={player.name}
+									value={currentPlayer == player.name ? value.toLocaleUpperCase() : null}
+								/>
+							);
+						})
+					)}
 				</div>
 				<input
 					value={value}
