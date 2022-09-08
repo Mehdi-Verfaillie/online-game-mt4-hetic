@@ -6,7 +6,6 @@ import './app.scss'
 import Game from './features/Game/Game'
 
 function App() {
-	const [inputValue, setInputValue] = useState('')
 	return (
 		<div>
 			<LandingPage />

@@ -8,6 +8,7 @@ import { EngWordApi } from './api/EngWordApi';
 import { LetterList, PlayersList } from './Data';
 
 import Players from '../Players/Players';
+import { Input } from '../components/input/Input';
 function Game() {
 	const [value, setValue] = useState('');
 	const [isMyTurn, setIsMyTurn] = useState(true); // temporaire :  a voir comment recuperer l'etat pour savoir qui joue
@@ -112,15 +113,16 @@ function Game() {
 						})
 					)}
 				</div>
-				<input
-					value={value}
-					onChange={(e) => setValue(e.target.value.toLocaleUpperCase())}
-					onKeyPress={(e) => handleKeyPress(e)}
-					className="input"
-					type="text"
-					id="name"
-					name="name"
-				/>
+	
+			<Input
+				id='name'
+				name='name'
+				type='text'
+				onChange={(e) => setValue(e.target.value.toLocaleUpperCase())}
+				onKeyPress={(e) => handleKeyPress(e)}
+				placeholder="placeholder"
+				value={value}
+			/>
 			</div>
 		</div>
 	);
