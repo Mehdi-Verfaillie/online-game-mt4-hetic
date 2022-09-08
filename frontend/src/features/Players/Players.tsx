@@ -1,6 +1,6 @@
 import React from 'react';
-import PlayersCard from './components/PlayersCard/PlayersCard';
-import Life from './components/Life/Life';
+import PlayersCard from './component/PlayersCard/PlayersCard';
+import Life from './component/Life/Life';
 import './Players.scss';
 
 type Props = {
