@@ -1,12 +1,12 @@
 import React from 'react';
-import PlayersCard from './composant/PlayersCard/PlayersCard';
-import Life from './composant/Life/Life';
+import PlayersCard from './components/PlayersCard/PlayersCard';
+import Life from './components/Life/Life';
 import './Players.scss';
 
 type Props = {
-	active?: boolean;
-	name?: string;
-	value?: string;
+	active: boolean;
+	name: string;
+	value: string;
 	isDead?: boolean;
 };
 
