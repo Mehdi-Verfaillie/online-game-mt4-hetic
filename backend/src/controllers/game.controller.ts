@@ -106,4 +106,29 @@ export default class GameController {
 
     socket.emit('join:room:success', this.game.players);
   }
+
+  /*
+    |--------------------------------------------------------------------------
+    | private start(game) method
+    |--------------------------------------------------------------------------
+    |
+    | The purpose of this method is to start the game with all players registered
+    | and change the game status to 'ongoing'.
+    |
+  */
+  private start(socket: Socket) {
+    if (socket.id !== this.game.players[0].id) {
+      socket.emit('start:game:error', { message: "You're not the owner of the room." });
+      return;
+    }
+
+    if (this.game.players.length <= 1) {
+      socket.emit('start:game:error', { message: `Insufficient number of players. (${this.game.players.length})` });
+      return;
+    }
+
+    this.game.status = 'ongoing';
+
+    socket.emit('start:game:success', {});
+  }
 }
