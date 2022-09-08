@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Button } from './features/components/button/Button'
-import { Input } from './features/components/input/Input'
+import { Button } from './components/button/Button'
+import { Input } from './components/input/Input'
 
 function App() {
 	const [inputValue, setInputValue] = useState('')
