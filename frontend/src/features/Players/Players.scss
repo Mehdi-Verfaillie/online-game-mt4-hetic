@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Viga&display=swap');
+
 .containerPlayers {
+	font-family: 'Viga';
 	position: relative;
 	width: 80px;
 	height: 80px;
@@ -17,6 +20,7 @@
 		top: -5px;
 		z-index: 100;
 	}
+
 	.word {
 		position: absolute;
 		bottom: -25px;
