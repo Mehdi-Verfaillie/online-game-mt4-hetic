@@ -1,0 +1,13 @@
+button {
+    padding: 0.4em 0.8em;
+    color: #fff;
+    font-weight: bold;
+    background: #26aa36;
+    border: none;
+    border-radius: 2em;
+    border-bottom: 2px solid rgba(0,0,0,0.15);
+    box-shadow: 0 0 0.2em 0 rgb(0 0 0 / 10%), 0 2px 0 0 rgb(0 0 0 / 10%);
+    user-select: none;
+    cursor: pointer;
+    outline: none;
+}

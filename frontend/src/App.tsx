@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
+import { Login } from "./features/login/component/Login.component";
 
 function App() {
 	return (
-		<div>
-			<>App</>
+		<div className="app">
+			<Login />
 		</div>
 	)
 }
