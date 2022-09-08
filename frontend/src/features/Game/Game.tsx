@@ -106,7 +106,7 @@ function Game() {
 									key={i}
 									active={currentPlayer == player.name ? true : false}
 									name={player.name}
-									value={currentPlayer == player.name ? value.toLocaleUpperCase() : null}
+									value={currentPlayer == player.name ? value : null}
 								/>
 							);
 						})
@@ -114,7 +114,7 @@ function Game() {
 				</div>
 				<input
 					value={value}
-					onChange={(e) => setValue(e.target.value)}
+					onChange={(e) => setValue(e.target.value.toLocaleUpperCase())}
 					onKeyPress={(e) => handleKeyPress(e)}
 					className="input"
 					type="text"
