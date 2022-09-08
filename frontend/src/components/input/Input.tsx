@@ -7,7 +7,7 @@ interface Props {
     name: string;
     type: string;
     value: string;
-    onKeyPress?: () => void;
+    onKeyPress?: (e:any) => void;
     onChange?: (e: any) => any;
 }
 
