@@ -1,11 +1,10 @@
 import React from 'react';
-import Button from './features/login/component/Button.component'
+import { Login } from "./features/login/component/Login.component";
 
 function App() {
 	return (
-		<div>
-			<>App</>
-			<Button />
+		<div className="app">
+			<Login />
 		</div>
 	)
 }
