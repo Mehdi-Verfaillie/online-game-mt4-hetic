@@ -9,7 +9,6 @@ function App() {
 	return (
 		<div>
 			<LandingPage />
-			<>App</>
 			<Button onClick={() => console.log('test')} content="Créer une partie" />
 			<Input
 				id='name'
@@ -20,9 +19,8 @@ function App() {
 				placeholder="placeholder"
 				value={inputValue}
 			/>
-			<Game/>
+		<div>	
 		</div>
-	)
 }
 
 export default App
