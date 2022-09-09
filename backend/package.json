@@ -65,6 +65,7 @@
     "nodemon": "^2.0.19",
     "pm2": "^5.2.0",
     "prettier": "^2.7.1",
+    "socket.io-client": "^4.5.2",
     "supertest": "^6.2.4",
     "ts-jest": "^29.0.0",
     "ts-node": "^10.9.1",
