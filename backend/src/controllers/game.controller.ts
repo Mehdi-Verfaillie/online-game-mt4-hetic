@@ -130,5 +130,46 @@ export default class GameController {
     this.game.status = 'ongoing';
 
     this.server.sockets.to(this.game.id).emit('start:game:success', {});
+
+
+  /*
+    |--------------------------------------------------------------------------
+    | private nextRound(game) method
+    |--------------------------------------------------------------------------
+    |
+    | The purpose of this method is to manage round flow only.
+    | We identify who is the current player and who's the next one.
+    |
+  */
+  private nextRound(socket: Socket, event: NextRoundEvent): NextRoundOutput {
+    const current = this.game.players.findIndex(player => player.isPlayingRound === true);
+    let next = current + 1;
+
+    // We comeback to the first element on the list if all players have alread played
+    if (next > this.game.players.length) {
+      next = 0;
+      this.game.players[next].isPlayingRound = true;
+    }
+
+    if (event === 'end:round:success') {
+      this.game.players[next].isPlayingRound = true;
+    }
+
+    if (event === 'end:round:fail') {
+      this.game.players[current].isPlayingRound = false;
+      this.game.players[current].lifePoint -= 1;
+
+      // We verify if the current player is eliminated
+      if (this.game.players[current].lifePoint === 0) {
+        remove(current).from(this.game.players);
+        next = current;
+        // this.game.players = remove<Player>(current).from(this.game.players);
+      }
+      this.game.players[next].isPlayingRound = true;
+    }
+
+    socket.emit(event, this.game.players);
+
+    return { current, next };
   }
 }

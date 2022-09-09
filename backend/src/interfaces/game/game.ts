@@ -5,3 +5,7 @@ export interface Game {
   players: Player[];
   status: 'available' | 'ongoing' | 'unavailable';
 }
+
+export type NextRoundEvent = 'end:round:fail' | 'end:round:success';
+
+export type NextRoundOutput = { current: number; next: number };
