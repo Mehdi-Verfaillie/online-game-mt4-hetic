@@ -104,7 +104,7 @@ export default class GameController {
 
     this.game.players.push({ id: socket.id, name, role: 'member', lifePoint: 3 });
 
-    socket.emit('join:room:success', this.game.players);
+    this.server.sockets.to(this.game.id).emit('join:room:success', this.game.players);
   }
 
   /*
@@ -129,6 +129,6 @@ export default class GameController {
 
     this.game.status = 'ongoing';
 
-    socket.emit('start:game:success', {});
+    this.server.sockets.to(this.game.id).emit('start:game:success', {});
   }
 }
