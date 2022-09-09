@@ -15,7 +15,7 @@ import SocketController from './socket.controller';
 export default class GameController {
   private server: SocketServer;
   private socketController: SocketController;
-  private maxPlayer = 6;
+  private MAX_ROUND_TIME = 15000; // ms
   private game: Game = { id: null, players: [], status: 'unavailable' };
 
   constructor(server: SocketServer) {
@@ -131,6 +131,36 @@ export default class GameController {
 
     this.server.sockets.to(this.game.id).emit('start:game:success', {});
 
+    this.round(socket);
+  }
+
+  /*
+    |--------------------------------------------------------------------------
+    | private round(game) method
+    |--------------------------------------------------------------------------
+    |
+    |
+    |
+    |
+  */
+  private round(socket: Socket) {
+    let counter = 0;
+    let remaining: number;
+
+    const interval = setInterval(() => {
+      // Remaining time in seconds
+      remaining = (this.MAX_ROUND_TIME - counter) / 1000;
+
+      socket.emit('countdown', remaining);
+
+      if (counter >= this.MAX_ROUND_TIME) {
+        this.nextRound(socket, 'end:round:fail');
+        clearInterval(interval);
+      }
+
+      counter += 1000;
+    }, 1000);
+  }
 
   /*
     |--------------------------------------------------------------------------
