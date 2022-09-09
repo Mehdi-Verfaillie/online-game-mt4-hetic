@@ -17,3 +17,10 @@ export const isEmpty = (value: string | number | object): boolean => {
     return false;
   }
 };
+
+
+export const remove = <T>(indexToDrop: number) => {
+  return {
+    from: (list: T[]) => list.splice(indexToDrop, 1),
+  };
+};
