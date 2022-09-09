@@ -65,7 +65,7 @@ export default class GameController {
 
     this.game.id = socket.id;
     this.game.status = 'available';
-    this.game.players.push({ id: socket.id, name, role: 'owner', lifePoint: 3 });
+    this.game.players = [{ id: socket.id, name, role: 'owner', lifePoint: 3, isPlayingRound: false }];
 
     socket.emit('create:room:success', this.game.players, socket.id);
   }
