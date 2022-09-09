@@ -1,4 +1,5 @@
-import { Game } from '@/interfaces/game/game';
+import { Game, NextRoundEvent, NextRoundOutput } from '@/interfaces/game/game';
+import { remove } from '@/utils/util';
 import { Socket, Server as SocketServer } from 'socket.io';
 import SocketController from './socket.controller';
 
@@ -15,6 +16,7 @@ import SocketController from './socket.controller';
 export default class GameController {
   private server: SocketServer;
   private socketController: SocketController;
+  private MAX_PLAYERS = 6;
   private MAX_ROUND_TIME = 15000; // ms
   private game: Game = { id: null, players: [], status: 'unavailable' };
 
@@ -95,14 +97,14 @@ export default class GameController {
       return;
     }
 
-    if (this.game.players.length >= this.maxPlayer) {
+    if (this.game.players.length >= this.MAX_PLAYERS) {
       socket.emit('join:room:error', { message: 'Maximum number of players reached.' });
       return;
     }
 
     await socket.join(room);
 
-    this.game.players.push({ id: socket.id, name, role: 'member', lifePoint: 3 });
+    this.game.players.push({ id: socket.id, name, role: 'member', lifePoint: 3, isPlayingRound: false });
 
     this.server.sockets.to(this.game.id).emit('join:room:success', this.game.players);
   }
@@ -112,7 +114,7 @@ export default class GameController {
     | private start(game) method
     |--------------------------------------------------------------------------
     |
-    | The purpose of this method is to start the game with all players registered
+    | The purpose of this method is to start the game with all registered players
     | and change the game status to 'ongoing'.
     |
   */
