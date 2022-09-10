@@ -3,6 +3,6 @@ export interface BaseInputProps<TValue = unknown> {
 	id: string
 	name: string
 	value?: TValue
-	onKeyPress?: () => void
+	onKeyPress?: (e: any) => void
 	onChange: (value?: TValue) => void
 }

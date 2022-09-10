@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@types/react": "^18.0.18"
+  },
+  "dependencies": {
+    "sass": "^1.54.8"
+  }
+}
