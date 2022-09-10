@@ -1,26 +1,21 @@
-import React, { useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import { Button } from './components/button/Button'
 import { Input } from './components/input/Input'
 import { LandingPage } from './views/LandingPage'
 import './app.scss'
 import Game from './features/Game/Game'
+import { SocketProvider } from './providers/socket.provider'
+import { io } from 'socket.io-client'
 
 function App() {
+	const clientAddress = 'ws://localhost:3000'
+
 	return (
-		<div>
+		<SocketProvider client={clientAddress}>
 			<LandingPage />
-			<Button onClick={() => console.log('test')} content="Créer une partie" />
-			<Input
-				id='name'
-				name='name'
-				type='text'
-				onChange={(e) => setInputValue(e.target.value)}
-				onKeyPress={() => console.log({inputValue})}
-				placeholder="placeholder"
-				value={inputValue}
-			/>
-		<div>	
-		</div>
+			{/* <Game></Game> */}
+		</SocketProvider>
+	)
 }
 
 export default App
