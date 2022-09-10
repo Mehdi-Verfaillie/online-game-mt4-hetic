@@ -5,14 +5,19 @@
 	position: relative;
 	width: 80px;
 	height: 80px;
-	margin: 20px;
+	margin: 48px 24px 48px 24px;
+
+	&[data-isDead='true'] {
+		opacity: 0.5;
+	}
 
 	.pseudo {
 		position: absolute;
-		top: -25px;
+		top: -35px;
 		left: 0;
 		right: 0;
 		text-align: center;
+		color: #ffffff;
 	}
 
 	.life {
@@ -23,9 +28,10 @@
 
 	.word {
 		position: absolute;
-		bottom: -25px;
+		bottom: -35px;
 		left: 0;
 		right: 0;
 		text-align: center;
+		color: #ffffff;
 	}
 }

@@ -1,17 +1,24 @@
 import React from 'react';
-import PlayersCard from './composant/PlayersCard/PlayersCard';
-import Life from './composant/Life/Life';
+import PlayersCard from './component/PlayersCard/PlayersCard';
+import Life from './component/Life/Life';
 import './Players.scss';
 
-function Players() {
+type Props = {
+	active: boolean;
+	name: string;
+	value: string;
+	isDead?: boolean;
+};
+
+function Players(props: Props) {
 	return (
-		<div className="containerPlayers">
-			<div className="pseudo">Pseudo</div>
+		<div data-isdead={props.isDead} className="containerPlayers">
+			<div className="pseudo">{props.name}</div>
 			<span className="life">
 				<Life life={3} />
 			</span>
-			<PlayersCard />
-			<div className="word">PIE</div>
+			<PlayersCard active={props.active} />
+			<div className="word">{props.value}</div>
 		</div>
 	);
 }
