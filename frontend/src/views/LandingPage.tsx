@@ -1,42 +1,26 @@
-import React, { useState, useMemo } from 'react'
-import { Input } from '@/components/input/Input'
-import { Button } from '@/components/button/Button'
+import { SocketContext } from '@/providers/socket.provider'
+import React, { useState, useEffect, useContext } from 'react'
 import './landingpage.scss'
-import { io } from 'socket.io-client'
 
 export const LandingPage = () => {
-	const [inputValue, setInputValue] = useState<string | null | undefined>('test')
-	const [hasError, setHasError] = useState(false)
+	const [createOrJoin, setCreateOrJoin] = useState<'create' | 'join'>('create')
 
-	const joinRoom = () => {
-		//
-	}
+	const context = useContext(SocketContext)
 
-	const createRoom = () => {
-		if (inputValue && inputValue.length) {
-			setHasError(false)
-			// CODE SOCKET IO ICI
-			return
+	const isCreateOrJoin = () => {
+		if (window.location.pathname === '/') {
+			setCreateOrJoin('create')
+			console.log('création une partie')
+		} else {
+			// Checker si l'id de la room existe
+			setCreateOrJoin('join')
+			console.log('rejoindre une partie')
 		}
-		setHasError(true)
 	}
 
-	// const socket = io();
+	useEffect(() => {
+		isCreateOrJoin()
+	}, [])
 
-	return (
-		<div className="landing-page">
-			<h1 className="landing-page-title">Entrer votre pseudo</h1>
-			<Input
-				id="name"
-				name="name"
-				onChange={e => setInputValue(e)}
-				placeholder="Entrer votre pseudo"
-				value={inputValue}
-			/>
-			<p className={'landing-page-error-message ' + (hasError && 'show')}>
-				Veuillez choisir un pseudo
-			</p>
-			<Button onClick={() => createRoom()} content="Créer une partie" />
-		</div>
-	)
+	return <div className="">{createOrJoin === 'create' ? context.create : context.join}</div>
 }
