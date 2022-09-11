@@ -1,3 +1,5 @@
+import { letters } from '@/constants/letters';
+
 /**
  * @method isEmpty
  * @param {String | Number | Object} value
@@ -18,7 +20,21 @@ export const isEmpty = (value: string | number | object): boolean => {
   }
 };
 
+/**
+ * "Return a random element from the given array."
+ *
+ * The function takes an array of strings as an argument. It returns a random element from
+ * the array
+ * @param list - ReadonlyArray<string>
+ * @returns A random item from the array.
+ */
+export const randomFromArray = (list: ReadonlyArray<string>) => {
+  return list[Math.floor(Math.random() * list.length)].toLowerCase();
+};
 
+/**
+ * Remove an element from an array at a specific index
+ */
 export const remove = <T>(indexToDrop: number) => {
   return {
     from: (list: T[]) => list.splice(indexToDrop, 1),
