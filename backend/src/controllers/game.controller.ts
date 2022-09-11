@@ -69,7 +69,7 @@ export default class GameController {
     this.game.status = 'available';
     this.game.players = [{ id: socket.id, name, role: 'owner', lifePoint: 3, isPlayingRound: false }];
 
-    socket.emit('create:room:success', this.game.players, socket.id);
+    socket.emit('create:room:success', { players: this.game.players, roomId: socket.id });
   }
 
   /*
@@ -106,7 +106,9 @@ export default class GameController {
 
     this.game.players.push({ id: socket.id, name, role: 'member', lifePoint: 3, isPlayingRound: false });
 
-    this.server.sockets.to(this.game.id).emit('join:room:success', this.game.players);
+    this.server.sockets.to(this.game.id).emit('join:room:success', {
+      players: this.game.players,
+    });
   }
 
   /*
@@ -131,9 +133,10 @@ export default class GameController {
 
     this.game.status = 'ongoing';
 
-    this.server.sockets.to(this.game.id).emit('start:game:success', {});
-
-    this.round(socket);
+    this.server.sockets.to(this.game.id).emit('start:game:success', {
+      hint: this.game.hint,
+      countdown: this.MAX_ROUND_TIME,
+    });
   }
 
   /*
@@ -200,7 +203,7 @@ export default class GameController {
       this.game.players[next].isPlayingRound = true;
     }
 
-    socket.emit(event, this.game.players);
+    this.server.sockets.emit(event, { players: this.game.players });
 
     return { current, next };
   }
