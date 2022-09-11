@@ -180,7 +180,7 @@ export default class GameController {
     let next = current + 1;
 
     // We comeback to the first element on the list if all players have alread played
-    if (next > this.game.players.length) {
+    if (next > this.game.players.length - 1) {
       next = 0;
       this.game.players[next].isPlayingRound = true;
     }
