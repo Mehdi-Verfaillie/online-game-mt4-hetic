@@ -234,7 +234,7 @@ export default class GameController {
       return;
     }
 
-    if (!(await new Dictionary(answer).searchWordInDictionary())) {
+    if (!(await new Dictionary(answer).isWordExist)) {
       this.server.sockets.emit('try:answer:fail', {});
       return;
     }
