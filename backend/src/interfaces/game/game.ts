@@ -9,4 +9,3 @@ export interface Game {
 export type RoundEvent = 'end:countdown' | 'try:answer';
 
 export type NextRoundEvent = 'end:round:fail' | 'end:round:success';
-export type NextRoundOutput = { current: number; next: number };

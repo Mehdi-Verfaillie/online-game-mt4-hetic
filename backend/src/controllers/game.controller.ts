@@ -1,5 +1,5 @@
 import { letters } from '@/constants/letters';
-import { Game, NextRoundEvent, NextRoundOutput, RoundEvent } from '@/interfaces/game/game';
+import { Game, NextRoundEvent, RoundEvent } from '@/interfaces/game/game';
 import Dictionary from '@/services/dictionary';
 import { randomFromArray, remove } from '@/utils/util';
 import { Socket, Server as SocketServer } from 'socket.io';
@@ -19,7 +19,7 @@ export default class GameController {
   private server: SocketServer;
   private socketController: SocketController;
   private MAX_PLAYERS = 6;
-  private MAX_ROUND_TIME = 5000; // ms
+  private MAX_ROUND_TIME = 15000; // ms
   private game: Game = { id: null, players: [], status: 'unavailable', hint: randomFromArray(letters) };
 
   constructor(server: SocketServer) {
@@ -190,7 +190,7 @@ export default class GameController {
 
   // FIXME: Currently wanever who send the 'end:countdown' event, the next player lose 1 life point
   // It's better to seach for the current player using his id from client (passed to the event on)
-  private nextRound(event: NextRoundEvent): NextRoundOutput {
+  private nextRound(event: NextRoundEvent) {
     const current = this.game.players.findIndex(player => player.isPlayingRound === true);
     let next = current + 1;
 
@@ -224,8 +224,6 @@ export default class GameController {
     }
 
     this.server.sockets.emit(event, { players: this.game.players, hint: this.game.hint });
-
-    return { current, next };
   }
 
   private async evaluateAnswer(answer?: string) {
@@ -234,7 +232,7 @@ export default class GameController {
       return;
     }
 
-    if (!(await new Dictionary(answer).searchWordInDictionary())) {
+    if (!(await new Dictionary(answer).isWordExist)) {
       this.server.sockets.emit('try:answer:fail', {});
       return;
     }
