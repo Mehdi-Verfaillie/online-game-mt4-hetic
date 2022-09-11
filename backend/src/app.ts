@@ -11,14 +11,21 @@ import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import { Server as SocketServer } from 'socket.io';
+import { Server as HttpServer } from 'http';
+import GameController from './controllers/game.controller';
 
 class App {
   public app: express.Application;
+  public http: HttpServer;
+  public socket: SocketServer;
   public env: string;
   public port: string | number;
 
   constructor(routes: Routes[]) {
     this.app = express();
+    this.http = new HttpServer(this.app);
+    this.socket = new SocketServer(this.http);
     this.env = NODE_ENV || 'development';
     this.port = PORT || 3000;
 
@@ -26,6 +33,7 @@ class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    this.initializeGame();
   }
 
   public listen() {
@@ -35,10 +43,15 @@ class App {
       logger.info(`🚀 App listening on the port ${this.port}`);
       logger.info(`=================================`);
     });
+
+    this.socket.listen(3333);
   }
 
   public getServer() {
-    return this.app;
+    return {
+      http: this.http,
+      socket: this.socket,
+    };
   }
 
   private initializeMiddlewares() {
@@ -56,6 +69,10 @@ class App {
     routes.forEach(route => {
       this.app.use('/', route.router);
     });
+  }
+
+  public initializeGame() {
+    new GameController(this.socket).init();
   }
 
   private initializeSwagger() {
