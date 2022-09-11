@@ -25,7 +25,7 @@ class App {
   constructor(routes: Routes[]) {
     this.app = express();
     this.http = new HttpServer(this.app);
-    this.socket = new SocketServer(this.http);
+    this.socket = new SocketServer(this.http, { cors: { origin: ORIGIN } });
     this.env = NODE_ENV || 'development';
     this.port = PORT || 3000;
 
