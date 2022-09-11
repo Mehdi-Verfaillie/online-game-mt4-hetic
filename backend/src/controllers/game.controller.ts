@@ -1,4 +1,7 @@
-import { randomLetters, remove } from '@/utils/util';
+import { letters } from '@/constants/letters';
+import { Game, NextRoundEvent, NextRoundOutput, RoundEvent } from '@/interfaces/game/game';
+import Dictionary from '@/services/dictionary';
+import { randomFromArray, remove } from '@/utils/util';
 import { Socket, Server as SocketServer } from 'socket.io';
 import SocketController from './socket.controller';
 
@@ -16,8 +19,8 @@ export default class GameController {
   private server: SocketServer;
   private socketController: SocketController;
   private MAX_PLAYERS = 6;
-  private MAX_ROUND_TIME = 15000; // ms
-  private game: Game = { id: null, players: [], status: 'unavailable', hint: randomLetters };
+  private MAX_ROUND_TIME = 5000; // ms
+  private game: Game = { id: null, players: [], status: 'unavailable', hint: randomFromArray(letters) };
 
   constructor(server: SocketServer) {
     this.server = server;
@@ -31,17 +34,29 @@ export default class GameController {
       /**
        * Create the room if 'create:room' event is sent by the client
        */
-      socket.on('create:room', ({ name }) => this.create(socket, name));
+      socket.on('create:room', ({ name }: { name: string }) => this.create(socket, name));
 
       /**
        * Join the room if 'join:room' event is sent by the client
        */
-      socket.on('join:room', async ({ name, room }) => await this.join(socket, room, name));
+      socket.on('join:room', async ({ name, room }: { name: string; room: string }) => await this.join(socket, room, name));
 
       /**
        * Start the game if 'start:game' event is sent by the client
        */
       socket.on('start:game', () => this.start(socket));
+
+      /**
+       * We listen for the countdown event to avoid the server to send to much event
+       * (number of live game * number of round * number of second of the timer)
+       * witch could lead to server memory leak.
+       */
+      socket.on('end:countdown', () => this.round('end:countdown'));
+
+      /**
+       *
+       */
+      socket.on('try:answer', ({ word }: { word: string }) => this.round('try:answer', word, socket));
     });
   }
 
@@ -143,27 +158,23 @@ export default class GameController {
     | private round(game) method
     |--------------------------------------------------------------------------
     |
-    |
-    |
+    | The purpose of this method is to manage rounds of the game and wait for
+    | the coundown to be end or the answer to be right
     |
   */
-  private round(socket: Socket) {
-    let counter = 0;
-    let remaining: number;
+  private round(event: RoundEvent, answer?: string, socket?: Socket) {
+    if (!answer) {
+      socket.emit('try:answer:error', { message: 'No answer provided.' });
+      return;
+    }
 
-    const interval = setInterval(() => {
-      // Remaining time in seconds
-      remaining = (this.MAX_ROUND_TIME - counter) / 1000;
+    if (event === 'end:countdown') {
+      this.nextRound('end:round:fail');
+      this.game.hint = randomFromArray(letters);
+      return;
+    }
 
-      socket.emit('countdown', remaining);
-
-      if (counter >= this.MAX_ROUND_TIME) {
-        this.nextRound(socket, 'end:round:fail');
-        clearInterval(interval);
-      }
-
-      counter += 1000;
-    }, 1000);
+    if (event === 'try:answer') this.evaluateAnswer(answer.toLowerCase());
   }
 
   /*
@@ -174,8 +185,12 @@ export default class GameController {
     | The purpose of this method is to manage round flow only.
     | We identify who is the current player and who's the next one.
     |
+    | The next round is defined by who's playing
   */
-  private nextRound(socket: Socket, event: NextRoundEvent): NextRoundOutput {
+
+  // FIXME: Currently wanever who send the 'end:countdown' event, the next player lose 1 life point
+  // It's better to seach for the current player using his id from client (passed to the event on)
+  private nextRound(event: NextRoundEvent): NextRoundOutput {
     const current = this.game.players.findIndex(player => player.isPlayingRound === true);
     let next = current + 1;
 
@@ -187,6 +202,8 @@ export default class GameController {
 
     if (event === 'end:round:success') {
       this.game.players[next].isPlayingRound = true;
+      this.game.players[current].isPlayingRound = false;
+      this.game.hint = randomFromArray(letters);
     }
 
     if (event === 'end:round:fail') {
@@ -206,8 +223,22 @@ export default class GameController {
       this.game.players[next].isPlayingRound = true;
     }
 
-    this.server.sockets.emit(event, { players: this.game.players });
+    this.server.sockets.emit(event, { players: this.game.players, hint: this.game.hint });
 
     return { current, next };
+  }
+
+  private async evaluateAnswer(answer?: string) {
+    if (!answer.includes(this.game.hint)) {
+      this.server.sockets.emit('try:answer:fail', {});
+      return;
+    }
+
+    if (!(await new Dictionary(answer).searchWordInDictionary())) {
+      this.server.sockets.emit('try:answer:fail', {});
+      return;
+    }
+
+    this.nextRound('end:round:success');
   }
 }
