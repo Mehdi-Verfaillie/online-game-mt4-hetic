@@ -1,5 +1,4 @@
-import { Game, NextRoundEvent, NextRoundOutput } from '@/interfaces/game/game';
-import { remove } from '@/utils/util';
+import { randomLetters, remove } from '@/utils/util';
 import { Socket, Server as SocketServer } from 'socket.io';
 import SocketController from './socket.controller';
 
@@ -18,7 +17,7 @@ export default class GameController {
   private socketController: SocketController;
   private MAX_PLAYERS = 6;
   private MAX_ROUND_TIME = 15000; // ms
-  private game: Game = { id: null, players: [], status: 'unavailable' };
+  private game: Game = { id: null, players: [], status: 'unavailable', hint: randomLetters };
 
   constructor(server: SocketServer) {
     this.server = server;
