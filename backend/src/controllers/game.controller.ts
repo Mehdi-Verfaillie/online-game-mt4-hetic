@@ -197,8 +197,12 @@ export default class GameController {
       if (this.game.players[current].lifePoint === 0) {
         remove(current).from(this.game.players);
         next = current;
-        // this.game.players = remove<Player>(current).from(this.game.players);
+
+        if (this.game.players.length === 1) {
+          this.server.sockets.emit('end:game', { players: this.game.players });
+        }
       }
+
       this.game.players[next].isPlayingRound = true;
     }
 
