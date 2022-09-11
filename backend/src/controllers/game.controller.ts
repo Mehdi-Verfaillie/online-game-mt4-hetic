@@ -19,7 +19,7 @@ export default class GameController {
   private server: SocketServer;
   private socketController: SocketController;
   private MAX_PLAYERS = 6;
-  private MAX_ROUND_TIME = 5000; // ms
+  private MAX_ROUND_TIME = 15000; // ms
   private game: Game = { id: null, players: [], status: 'unavailable', hint: randomFromArray(letters) };
 
   constructor(server: SocketServer) {
