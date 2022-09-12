@@ -1,54 +1,41 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Game.scss';
 import Bomb2 from '../../style/images/bomb2.svg';
 import Star from '../../style/images/star.svg';
-import { EngWordApi } from './api/EngWordApi';
-import { LetterList, PlayersList } from './Data';
 
 import Players from '../Players/Players';
 import { Input } from '@/components/input/Input';
 import WinPage from './WinPage';
+import { SocketContext } from '@/providers/socket.provider';
+
 function GameStart() {
   const [value, setValue] = useState('');
-  const [isMyTurn, setIsMyTurn] = useState(true); // temporaire :  a voir comment recuperer l'etat pour savoir qui joue
-  const [increment, setIncrement] = useState(0);
-  const [counter, setCounter] = useState(Math.floor(Math.random() * (15 - 10 + 1) + 10));
 
-  const random = () => {
-    return LetterList[Math.floor(Math.random() * LetterList.length)];
-  };
-  const [letter, setLetter] = useState(random());
-  const [dead, setDead] = useState([]);
+  const {
+    state: { players, hint, countdown },
+    listeners,
+    emitters,
+    dispatch,
+  } = useContext(SocketContext);
 
   useEffect(() => {
-    if (dead.length != PlayersList.length - 1) {
-      counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
-    }
-    if (counter == 0) {
-      setDead([...dead, PlayersList[increment].name]);
-      PlayersList.splice(increment, 1, 'dead');
-      setCounter(Math.floor(Math.random() * (15 - 10 + 1) + 10));
-      setIncrement(increment < PlayersList.length - 1 ? increment + 1 : 0);
-    }
-  }, [counter]);
+    listeners.onStartGame.success();
+    listeners.onStartGame.error();
+    listeners.endCountdown.fail(dispatch);
+    // listeners.endRound.success(dispatch);
+  }, [dispatch, listeners.endCountdown, listeners.endRound, listeners.onStartGame]);
 
   useEffect(() => {
-    if (PlayersList[increment] == 'dead') setIncrement(increment < PlayersList.length - 1 ? increment + 1 : 0);
-  }, [increment]);
+    const timer = setTimeout(() => {
+      emitters.endCountdown();
+    }, countdown);
+    return () => clearTimeout(timer);
+  }, [countdown, emitters]);
 
-  const handleKeyPress = async event => {
+  const handleKeyPress = event => {
     if (event.key === 'Enter') {
-      const exist = await EngWordApi(value);
-      if (exist == true && value.toUpperCase().indexOf(letter) > -1) {
-        if (increment < PlayersList.length - 1) {
-          setIncrement(increment < PlayersList.length - 1 ? increment + 1 : 0);
-          setLetter(random());
-        } else {
-          setIncrement(0);
-        }
-      }
-      setValue('');
+      emitters.tryAnswer(value);
     }
   };
 
@@ -58,7 +45,7 @@ function GameStart() {
         <div className="bomb">
           <div style={{ position: 'relative' }}>
             <img src={Bomb2} alt="bomb" />
-            <p className="letter">{letter}</p>
+            <p className="letter">{hint}</p>
             <div className="star">
               <img src={Star} alt="star" />
             </div>
@@ -66,25 +53,9 @@ function GameStart() {
         </div>
 
         <div className="players">
-          {dead.length == PlayersList.length - 1 ? (
-            <>
-              <WinPage player={PlayersList[increment].name} />
-            </>
-          ) : (
-            PlayersList.map((player, i) => {
-              if (player == 'dead') {
-                return <Players key={i} active={false} name={null} value={null} isDead={true} />;
-              }
-              return (
-                <Players
-                  key={i}
-                  active={PlayersList[increment].name == player.name ? true : false}
-                  name={player.name}
-                  value={PlayersList[increment].name == player.name ? value : null}
-                />
-              );
-            })
-          )}
+          {players.map(player => (
+            <Players key={player.id} isActive={player.isPlayingRound} name={player.name} value={value} />
+          ))}
         </div>
 
         <Input

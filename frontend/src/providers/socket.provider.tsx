@@ -17,6 +17,7 @@ interface InitialStateProps {
   roomId: string | null;
   hint: string | null;
   status: 'available' | 'ongoing' | 'unavailable';
+  countdown: number | null;
 }
 const initialState: InitialStateProps = {
   players: [],
@@ -24,6 +25,7 @@ const initialState: InitialStateProps = {
   roomId: null,
   hint: null,
   status: 'unavailable',
+  countdown: null,
 };
 
 const reducer = (state, action) => {
@@ -36,6 +38,8 @@ const reducer = (state, action) => {
       return { ...state, roomId: action.value };
     case 'SET_GAME_HINT':
       return { ...state, hint: action.value };
+    case 'SET_GAME_COUNTDOWN':
+      return { ...state, countdown: action.value };
     case 'SET_GAME_STATUS':
       return { ...state, status: action.value };
     default:

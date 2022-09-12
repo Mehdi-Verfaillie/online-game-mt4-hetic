@@ -22,7 +22,7 @@ function WinPage(props: Props) {
             }}
           >
             <p>WIN</p>
-            <Players active={false} name={props.player} value={null} />
+            <Players isActive={false} name={props.player} value={null} />
           </div>
         </>
       }
