@@ -11,10 +11,19 @@ interface Props {
 export const SocketContext = createContext<any>([{}, {}, {}, () => {}]);
 const socket = io('ws://localhost:3333');
 
-const initialState: { players: Player[]; id: string | null } = {
+interface InitialStateProps {
+  players: Player[];
+  playerId: string | null;
+  roomId: string | null;
+  hint: string | null;
+  status: 'available' | 'ongoing' | 'unavailable';
+}
+const initialState: InitialStateProps = {
   players: [],
   playerId: null,
   roomId: null,
+  hint: null,
+  status: 'unavailable',
 };
 
 const reducer = (state, action) => {
@@ -25,6 +34,10 @@ const reducer = (state, action) => {
       return { ...state, playerId: action.value };
     case 'SET_ROOM_ID':
       return { ...state, roomId: action.value };
+    case 'SET_GAME_HINT':
+      return { ...state, hint: action.value };
+    case 'SET_GAME_STATUS':
+      return { ...state, status: action.value };
     default:
       return state;
   }

@@ -28,7 +28,13 @@ function WaitingRoom(props: Props) {
   useEffect(() => {
     context.listeners.onJoinRoom.success(context);
     context.listeners.onJoinRoom.error();
+    context.listeners.onStartGame.success(context);
+    context.listeners.onStartGame.error();
   }, [context]);
+
+  const startGame = () => {
+    context.emitters.startGame();
+  };
 
   return (
     <div className="body">
@@ -46,11 +52,7 @@ function WaitingRoom(props: Props) {
             return <Players key={player.id} name={player.name} />;
           })}
         </div>
-        {isOwner ? (
-          <Button content="Lancer la partie" onClick={props.start} />
-        ) : (
-          <p style={{ color: 'white' }}>En attente de l’hôte de la partie...</p>
-        )}
+        {isOwner ? <Button content="Lancer la partie" onClick={startGame} /> : <p style={{ color: 'white' }}>En attente de l’hôte de la partie...</p>}
       </div>
     </div>
   );

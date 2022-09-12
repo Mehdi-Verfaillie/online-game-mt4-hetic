@@ -19,13 +19,27 @@ export const listeners = (socket: Socket) => {
     },
 
     onJoinRoom: {
-      success: (context, navigate: () => void) => {
+      success: context => {
         socket.on('join:room:success', ({ players }) => {
           context.dispatch({ type: 'SET_PLAYERS', value: players });
         });
       },
       error: () => {
         socket.on('join:room:error', ({ message }) => {
+          console.log(message);
+        });
+      },
+    },
+
+    onStartGame: {
+      success: context => {
+        socket.on('start:game:success', ({ hint, countdown }) => {
+          context.dispatch({ type: 'SET_GAME_HINT', value: hint });
+          context.dispatch({ type: 'SET_GAME_STATUS', value: 'ongoing' });
+        });
+      },
+      error: () => {
+        socket.on('start:game:error', ({ message }) => {
           console.log(message);
         });
       },

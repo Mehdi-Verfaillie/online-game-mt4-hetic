@@ -5,10 +5,11 @@ import Bomb from '../../style/images/bomb.svg';
 import WaitingRoom from './WaitingRoom';
 import { Join } from './join/Join';
 import { SocketContext } from '@/providers/socket.provider';
+import GameStart from './GameStart';
 
 function Game() {
   const {
-    state: { players, playerId },
+    state: { players, playerId, status },
   } = useContext(SocketContext);
 
   const player = useMemo(() => {
@@ -23,7 +24,8 @@ function Game() {
         <img src={Bomb} alt="bomb" />
         <h1>Bomb Party</h1>
       </div>
-      {!player ? <Join /> : <WaitingRoom player={player} />}
+
+      {status === 'ongoing' ? <GameStart /> : !player ? <Join /> : <WaitingRoom player={player} />}
     </div>
   );
 }
