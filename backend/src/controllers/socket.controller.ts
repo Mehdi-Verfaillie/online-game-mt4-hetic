@@ -20,5 +20,7 @@ export default class SocketController {
   public connection(socket: Socket) {
     console.log(`Connection status: ${socket.connected ? 'connected' : 'disconnected'} as ${socket.id}`);
     this.isConnected = socket.connected;
+
+    socket.emit('connection:success', { id: socket.id });
   }
 }
