@@ -18,9 +18,10 @@ function WaitingRoom(props: Props) {
     state: { players },
   } = useContext(SocketContext);
 
-  const owner = useMemo(() => {
-    return players.find(player => player.role === 'owner');
-  }, [players]);
+  const isOwner = useMemo(() => {
+    if (props.player.role !== 'owner') return false;
+    return true;
+  }, [props.player.role]);
 
   const context = useContext(SocketContext);
 
@@ -45,7 +46,11 @@ function WaitingRoom(props: Props) {
             return <Players key={player.id} name={player.name} />;
           })}
         </div>
-        {owner ? <Button content="Lancer la partie" onClick={props.start} /> : <p style={{ color: 'white' }}>En attente de l’hôte de la partie...</p>}
+        {isOwner ? (
+          <Button content="Lancer la partie" onClick={props.start} />
+        ) : (
+          <p style={{ color: 'white' }}>En attente de l’hôte de la partie...</p>
+        )}
       </div>
     </div>
   );
