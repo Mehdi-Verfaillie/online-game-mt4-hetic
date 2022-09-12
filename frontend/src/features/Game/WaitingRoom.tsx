@@ -2,14 +2,14 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import './Game.scss';
 import Bomb2 from '../../style/images/bomb2.svg';
-import { PlayersList } from './Data';
 import { SocketContext } from '@/providers/socket.provider';
 
 import Players from '../Players/Players';
 import { Button } from '@/components/button/Button';
-import { io } from 'socket.io-client';
+import { Player } from '@/interfaces/game/player';
 
 interface Props {
+  player: Player;
   start?: () => void;
 }
 
@@ -28,8 +28,6 @@ function WaitingRoom(props: Props) {
     context.listeners.onJoinRoom.success(context);
     context.listeners.onJoinRoom.error();
   }, [context]);
-
-  console.log(context);
 
   return (
     <div className="body">

@@ -2,7 +2,6 @@
 import React, { useContext } from 'react';
 import './Game.scss';
 import Bomb from '../../style/images/bomb.svg';
-import GameStart from './GameStart';
 import WaitingRoom from './WaitingRoom';
 import { Join } from './join/Join';
 import { SocketContext } from '@/providers/socket.provider';

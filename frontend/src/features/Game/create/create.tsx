@@ -4,7 +4,6 @@ import { Input } from '@/components/input/Input';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SocketContext } from '@/providers/socket.provider';
-import '../../../views/landingpage.scss';
 
 export const Create = () => {
   const [inputValue, setInputValue] = useState<string | null | undefined>('test');

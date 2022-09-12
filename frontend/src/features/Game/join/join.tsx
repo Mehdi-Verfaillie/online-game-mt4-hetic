@@ -4,7 +4,7 @@ import { Input } from '@/components/input/Input';
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SocketContext } from '@/providers/socket.provider';
-import '../../../views/landingpage.scss';
+// import '../../../views/landingpage.scss';
 
 export const Join = () => {
   const [inputValue, setInputValue] = useState<string | null | undefined>('test');
