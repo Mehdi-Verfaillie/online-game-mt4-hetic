@@ -1,21 +1,32 @@
-import React, { createContext, useContext, useState } from 'react'
-import { Button } from './components/button/Button'
-import { Input } from './components/input/Input'
-import { LandingPage } from './views/LandingPage'
-import './app.scss'
-import Game from './features/Game/Game'
-import { SocketProvider } from './providers/socket.provider'
-import { io } from 'socket.io-client'
+/* eslint-disable prettier/prettier */
+import React, { useContext } from 'react';
+import './app.scss';
+import Game from './features/Game/Game';
+import { SocketContext, SocketProvider } from './providers/socket.provider';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Create } from './features/Game/create/Create';
+import { Join } from './features/Game/join/Join';
+import WaitingRoom from './features/Game/WaitingRoom';
 
 function App() {
-	const clientAddress = 'ws://localhost:3000'
+  return (
+    <SocketProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Create />} />
+          <Route path="/:id" element={<WaitingRoom />} />
+          <Route path="/join/:id" element={<Join />} />
+        </Routes>
+      </BrowserRouter>
+    </SocketProvider>
 
-	return (
-		<SocketProvider client={clientAddress}>
-			<LandingPage />
-			{/* <Game></Game> */}
-		</SocketProvider>
-	)
+    // <div>
+    // 	{/* <LandingPage />
+    // 	<>App</> */}
+    // 	{/* <Button onClick={() => console.log('test')} content="Créer une partie" /> */}
+    // 	<Game />
+    // </div>
+  );
 }
 
-export default App
+export default App;
