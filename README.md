@@ -70,10 +70,6 @@ yarn dev
 
 # Utils - All utilities
 /src/utils
-`
-``
-
-
 ```
 
 ## 🏛️ Architecture Frontend
