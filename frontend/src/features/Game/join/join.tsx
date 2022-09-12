@@ -2,7 +2,6 @@
 import { Button } from '@/components/button/Button';
 import { Input } from '@/components/input/Input';
 import React, { useContext, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { SocketContext } from '@/providers/socket.provider';
 import '../../../views/landingpage.scss';
@@ -10,7 +9,6 @@ import '../../../views/landingpage.scss';
 export const Join = () => {
   const [inputValue, setInputValue] = useState<string | null | undefined>('test');
   const [hasError, setHasError] = useState(false);
-  const { id } = useParams();
   const navigate = useNavigate();
   const context = useContext(SocketContext);
 
@@ -25,7 +23,7 @@ export const Join = () => {
 
   const joinRoom = () => {
     if (!hasError) {
-      context.emitters.joinRoom(inputValue, window.location.pathname.slice(6, window.location.pathname.length));
+      context.emitters.joinRoom(inputValue, window.location.pathname.slice(1, window.location.pathname.length));
     }
   };
 
