@@ -12,8 +12,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Create />} />
-          <Route path="/:id" element={<WaitingRoom />} />
-          <Route path="/join/:id" element={<Join />} />
+          <Route path="/:id" element={<Game />} />
         </Routes>
       </BrowserRouter>
     </SocketProvider>
