@@ -1,23 +1,45 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import './Game.scss';
 import Bomb2 from '../../style/images/bomb2.svg';
-import { PlayersList } from './Data';
+import { SocketContext } from '@/providers/socket.provider';
 
 import Players from '../Players/Players';
 import { Button } from '@/components/button/Button';
+import { Player } from '@/interfaces/game/player';
 
 interface Props {
+  player: Player;
   start?: () => void;
 }
 
 function WaitingRoom(props: Props) {
-  const [value, setValue] = useState('');
-  const [currentPlayer, setCurrentPlayer] = useState(PlayersList[0].name);
-  const [isHost, setIsHost] = useState(true);
+  const {
+    state: { players },
+  } = useContext(SocketContext);
+
+  const isOwner = useMemo(() => {
+    if (props.player.role !== 'owner') return false;
+    return true;
+  }, [props.player.role]);
+
+  const context = useContext(SocketContext);
+
+  useEffect(() => {
+    context.listeners.onJoinRoom.success(context);
+    context.listeners.onJoinRoom.error();
+    context.listeners.onStartGame.success(context);
+    context.listeners.onStartGame.error();
+  }, [context]);
+
+  const startGame = () => {
+    context.emitters.startGame();
+  };
 
   return (
     <div className="body">
+      <p style={{ textAlign: 'center', color: 'white' }}> http://localhost:3000</p>
+
       <div className="containerBomb">
         <div className="bomb">
           <div style={{ position: 'relative' }}>
@@ -26,15 +48,11 @@ function WaitingRoom(props: Props) {
         </div>
 
         <div className="players">
-          {PlayersList.map((player, i) => {
-            return <Players key={i} name={player.name} value={currentPlayer == player.name ? value : null} />;
+          {players.map((player, i) => {
+            return <Players key={player.id} name={player.name} />;
           })}
         </div>
-        {isHost ? (
-          <Button content="Lancer la partie" onClick={props.start} />
-        ) : (
-          <p style={{ color: 'white' }}>En attente de l’hôte de la partie...</p>
-        )}
+        {isOwner ? <Button content="Lancer la partie" onClick={startGame} /> : <p style={{ color: 'white' }}>En attente de l’hôte de la partie...</p>}
       </div>
     </div>
   );

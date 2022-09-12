@@ -1,11 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Viga&display=swap');
 
 * {
-	font-family: 'Viga', sans-serif;
+  font-family: 'Viga', sans-serif;
 }
 
 html {
-	background: linear-gradient(180deg, #191831 0%, #131226 100%) no-repeat;
-	background-size: 100vw 100vh;
-	height: 100vh;
+  background: linear-gradient(180deg, #191831 0%, #131226 100%) no-repeat;
+  background-size: 100vw 100vh;
+  height: 100vh;
+}
+
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+
+  .landing-page-title {
+    font-size: 1.5rem;
+    color: white;
+    margin: 0 0 0.5rem 0;
+    font-weight: 500;
+  }
+
+  .landing-page-error-message {
+    color: #fd4042;
+    margin: 0;
+    display: none;
+
+    &.show {
+      display: block;
+    }
+  }
 }

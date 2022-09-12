@@ -163,7 +163,7 @@ export default class GameController {
     |
   */
   private round(event: RoundEvent, answer?: string, socket?: Socket) {
-    if (!answer) {
+    if (socket && !answer) {
       socket.emit('try:answer:error', { message: 'No answer provided.' });
       return;
     }
