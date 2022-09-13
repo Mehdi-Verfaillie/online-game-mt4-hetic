@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
-import { Button } from './components/button/Button'
-import { Input } from './components/input/Input'
-import { LandingPage } from './views/LandingPage'
+import React from 'react'
+// import { Button } from './components/button/Button'
+// import { Input } from './components/input/Input'
+// import { LandingPage } from './views/LandingPage'
+import { Text } from './components/error404/Text.component'
 import './app.scss'
-import Game from './features/Game/Game'
+// import Game from './features/Game/Game'
 
 function App() {
 	return (
 		<div>
-			<LandingPage />
-			<Button onClick={() => console.log('test')} content="Créer une partie" />
+			{/* <LandingPage /> */}
+			<Text text="Erreur votre page nexiste pas" />
+			{/* <Button onClick={() => console.log('test')} content="Créer une partie" />
 			<Input
 				id='name'
 				name='name'
@@ -18,9 +20,9 @@ function App() {
 				onKeyPress={() => console.log({inputValue})}
 				placeholder="placeholder"
 				value={inputValue}
-			/>
-		<div>	
+			/> */}
 		</div>
+	)
 }
 
 export default App
